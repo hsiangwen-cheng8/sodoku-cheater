@@ -1,0 +1,96 @@
+.Square {
+  border: 1px solid rgb(161, 159, 159);
+}
+
+.Square[data-y="2"],
+.Square[data-y="5"],
+.Square[data-y="8"] {
+  border-right: 2px solid black;
+}
+
+.Square[data-x="2"],
+.Square[data-x="5"],
+.Square[data-x="8"] {
+  border-bottom: 2px solid black;
+}
+
+.Square[data-x="0"] {
+  border-top: 2px solid black;
+}
+
+.Square[data-y="0"] {
+  border-left: 2px solid black;
+}
+
+input.SquareInput {
+  outline: none;
+  text-align: center;
+  border: none;
+  background-color: rgb(255, 255, 255);
+  padding-top: auto;
+  padding-bottom: auto;
+  height: 3.5rem;
+  width: 3.5rem;
+  font-size: 2rem;
+  /* color: transparent; */
+}
+
+input.SquareInput::target-text {
+  background-color: blue;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+.PotentialSquare {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    ". . ."
+    ". . ."
+    ". . .";
+  color: rgb(128, 128, 128);
+}
+
+.PotentialSquareHighLighted {
+  height: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  gap: 0px 0px;
+  grid-template-areas:
+    ". . ."
+    ". . ."
+    ". . .";
+  background-color: rgb(77, 187, 224);
+  color: rgb(128, 128, 128);
+}
+
+.NormalSquareHighLighted{
+  height: 100%;
+  background-color: rgb(0, 166, 221);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bolder;
+}
+
+.NormalSquare{
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bolder;
+  /* background-color: rgb(100, 156, 175); */
+}
