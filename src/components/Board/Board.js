@@ -3,12 +3,20 @@ import styles from './Board.module.css'
 import Square from '../Square/Square';
 import IconButton from '@material-ui/core/IconButton';
 import BorderColorIcon from '@material-ui/icons/BorderColor';
+import RestoreIcon from '@material-ui/icons/Restore';
 class SudokuCell {
     constructor(row, col, area, id, cur_val = 0,
         potential_vals = [true, true, true, true, true, true, true, true, true],
-        enableHighLight = false, showError = false) {
+        enableHighLight = 0, showError = false) {
         this.cur_val = cur_val;
         this.potential_vals = potential_vals;
+        /**
+         * 0 = no highlight
+         * 1 = primary highlight where square.cur_val = selected_sqaure.cur_val
+         * 2 = secondary highlight where square.potential_val[val-1] === true
+         * 3 = for square in same row, col, area as selected square
+         * 4 = error
+         */
         this.enableHighLight = enableHighLight;
         this.row = row;
         this.col = col;
@@ -40,6 +48,7 @@ const Board = () => {
     const [Operations, setOperations] = useState([]);
     const [OperationsID, setOperationsID] = useState(0);
     const [pencilMode, setPencilMode] = useState(false);
+    const [selectedSquareID, setselectedSquareID] = useState();
 
     const getArea = (row, col) => {
         if (row < 3 && col < 3)
@@ -62,6 +71,32 @@ const Board = () => {
             return 9;
     }
 
+    const findError = () => {
+        let temp_squares = [...Squares];
+        for (let i = 0; i < Squares.length; ++i) {
+            temp_squares[i].showError = false;
+        }
+        for (let i = 0; i < Squares.length; ++i) {
+            let target_square = temp_squares[i];
+            temp_squares.map((square) => {
+                let found_error = false;
+                if (square.id !== target_square.id && square.cur_val === target_square.cur_val && target_square.cur_val !== 0) {
+                    if (square.row === target_square.row || square.col === target_square.col || square.area === target_square.area) {
+                        console.log(square.id + ' ' + target_square.id)
+                        found_error = true;
+                        square.showError = true;
+                        target_square.showError = true;
+                    }
+                }
+                if (!found_error && square.showError === false) {
+                    square.showError = false;
+                }
+                return square;
+            })
+        }
+        setSquares(temp_squares);
+    }
+
     const initSquares = () => {
         for (let i = 0; i < 9; ++i) {
             for (let j = 0; j < 9; ++j) {
@@ -76,14 +111,18 @@ const Board = () => {
         let pre_val = square.cur_val;
         let potentialValsUpdated = false;
         // Set potential vals
-        if (square.cur_val === 0 && pencilMode === true) {
+        if ((square.cur_val === 0 && pencilMode === true) || mode === 1) {
             square.potential_vals[val - 1] = !square.potential_vals[val - 1];
+            console.log(square.potential_vals);
             let operation = new Operation('setPotentialVal', val, id, OperationsID, pre_val);
-            setOperations(operations => [...operations, operation]);
-            setOperationsID(OperationsID+1);
+            if (mode === -1) {
+                setOperations(operations => [...operations, operation]);
+                setOperationsID(OperationsID + 1);
+            }
         }
         // square in pencil mode. set the value
-        else if (square.cur_val === 0 && pencilMode === false) {
+        else if ((square.cur_val === 0 && pencilMode === false) || mode === 2) {
+            console.log(square.potential_vals);
             square.cur_val = val;
             potentialValsUpdated = true;
         }
@@ -96,30 +135,40 @@ const Board = () => {
         // potential vals
         else {
             square.cur_val = 0;
-            let operation = new Operation('setCurVal', 0, id, OperationsID, pre_val);
-            setOperations(operations => [...operations, operation]);
+            if (mode === -1) {
+                let operation = new Operation('setCurVal', 0, id, OperationsID, pre_val);
+                setOperations(operations => [...operations, operation]);
+            }
             square.potential_vals[val - 1] = true;
-            operation = new Operation('setPotentialVal', val, id, OperationsID, pre_val);
-            setOperations(operations => [...operations, operation]);
-            setOperationsID(OperationsID+2);
+            if (mode === -1) {
+                let operation = new Operation('setPotentialVal', val, id, OperationsID, pre_val);
+                setOperations(operations => [...operations, operation]);
+                setOperationsID(OperationsID + 2);
+            }
         }
         if (potentialValsUpdated) {
             setSquares(
                 Squares.map(s => {
                     let newSquare = s;
-                    if (s.id == square.id) {
-                        let operation = new Operation('setPotentialVal', val, newSquare.id, OperationsID, s.cur_val);
-                        setOperations(operations => [...operations, operation]);
-                        let operation2 = new Operation('setCurVal', val, newSquare.id, OperationsID, s.cur_val);
-                        setOperations(operations => [...operations, operation2]);
-                        setOperationsID(OperationsID+2);
+                    if (s.id === square.id) {
+                        if (mode === -1) {
+                            // let operation = new Operation('setPotentialVal', val, newSquare.id, OperationsID, pre_val);
+                            // setOperations(operations => [...operations, operation]);
+                            let operation2 = new Operation('setCurVal', val, newSquare.id, OperationsID, pre_val);
+                            setOperations(operations => [...operations, operation2]);
+                            // setOperationsID(OperationsID + 2);
+                            setOperationsID(OperationsID + 1);
+                        }
                         return square;
                     }
-                    else if (s.row === square.row || s.col === square.col || s.area === square.area) {
+                    else if ((s.row === square.row || s.col === square.col || s.area === square.area)
+                        && newSquare.potential_vals[val - 1] === false) {
                         newSquare.potential_vals[val - 1] = false;
-                        let operation = new Operation('setPotentialVal', val, newSquare.id, OperationsID, s.cur_val);
-                        setOperations(operations => [...operations, operation]);
-                        setOperationsID(OperationsID+1);
+                        if (mode === -1) {
+                            let operation = new Operation('setPotentialVal', val, newSquare.id, OperationsID, pre_val);
+                            setOperations(operations => [...operations, operation]);
+                            setOperationsID(OperationsID + 1);
+                        }
                         return newSquare;
                     }
                     else
@@ -132,13 +181,31 @@ const Board = () => {
                 Squares.map(s => s.id === square.id ? square : s)
             )
         }
-
+        showHighLightWrapper(id);
+        findError();
     }
 
-    const showHighLight = (board, row, col, area) => {
+    const showHighLight = (board, val, row, col, area) => {
         for (let i = 0; i < board.length; ++i) {
-            if (board[i].row === row || board[i].col === col || board[i].area === area) {
-                board[i].enableHighLight = true;
+            if (val !== 0) {
+                if (board[i].cur_val === val) {
+                    board[i].enableHighLight = 1;
+                }
+                else if (board[i].cur_val === 0 && board[i].potential_vals[val - 1] === true) {
+                    board[i].enableHighLight = 2;
+                }
+                else if ((board[i].row === row || board[i].col === col || board[i].area === area) && board[i].potential_vals[val - 1] === true) {
+                    board[i].enableHighLight = 3;
+                }
+            }
+            else {
+                if (board[i].row === row || board[i].col === col || board[i].area === area) {
+                    board[i].enableHighLight = 3;
+                }
+                else {
+                    board[i].enableHighLight = 0;
+                }
+
             }
         }
         return board;
@@ -148,18 +215,19 @@ const Board = () => {
         let targetSquare = Squares[id];
         let newBoard = [...Squares];
         for (let i = 0; i < newBoard.length; ++i) {
-            newBoard[i].enableHighLight = false;
+            newBoard[i].enableHighLight = 0;
         }
-        newBoard = showHighLight(newBoard, targetSquare.row, targetSquare.col, targetSquare.area);
+        newBoard = showHighLight(newBoard, targetSquare.cur_val, targetSquare.row, targetSquare.col, targetSquare.area);
         if (targetSquare.cur_val !== 0) {
             for (let i = 0; i < newBoard.length; ++i) {
                 if (newBoard[i].cur_val === targetSquare.cur_val) {
-                    newBoard = showHighLight(newBoard, newBoard[i].row, newBoard[i].col, newBoard[i].area);
+                    newBoard = showHighLight(newBoard, targetSquare.cur_val, targetSquare.row, targetSquare.col, targetSquare.area);
                 }
             }
         }
 
         setSquares(newBoard);
+        setselectedSquareID(id);
     }
 
     const updatePencilMode = (e) => {
@@ -167,16 +235,27 @@ const Board = () => {
     }
 
     const reverseOperation = (e) => {
+        if(operations.length === 0) return;
         let operations = [...Operations];
-        let operation = operations[operations.length];
-        let index = operations.length;
-        let stepID = operation.stepsID;
-        while(index >= 0 && operations[index].stepsID == stepID){
-            if (operation.action === 'setCurVal') {
-                updateSquare(operation.squareID, operation.pre_val);
+        let index = operations.length-1;
+        let stepID = operations[operations.length-1].stepsID;
+        let selectedSquare = selectedSquareID;
+        console.log(operations)
+        while (index >= 0 && operations[index].stepsID === stepID) {
+            console.log(operations[index])
+            if (operations[index].action === 'setCurVal') {
+                updateSquare(operations[index].squareID, operations[index].pre_val, 0);
+            }
+            else if(operations[index].action === 'setPotentialVal'){
+                // mode 1 to setpotential vals
+                console.log('asdufhnsiaoudfh')
+                updateSquare(operations[index].squareID, operations[index].val, 1);
             }
             --index;
+            operations.pop(operations.length-1);
         }
+        setOperations(operations);
+        setselectedSquareID(selectedSquare);
         //     const name = e.target.getAttribute("name")
         //      updateList(list.filter(item => item.name !== name));
     };
@@ -188,15 +267,18 @@ const Board = () => {
     return (
         <div className={styles.Board}>
             <div></div>
-            <div className={styles.Container}>
-                {Squares.map(square =>
-                    <Square
-                        key={square.row * 9 + square.col}
-                        square={square}
-                        updateSquare={updateSquare}
-                        showHighLightWrapper={showHighLightWrapper}
-                    />
-                )}
+            <div className={styles.BoardWrapper}>
+                <div className={styles.Container}>
+                    {Squares.map(square =>
+                        <Square
+                            key={square.row * 9 + square.col}
+                            square={square}
+                            updateSquare={updateSquare}
+                            selectedSquareID={selectedSquareID}
+                            showHighLightWrapper={showHighLightWrapper}
+                        />
+                    )}
+                </div>
             </div>
             <div>
                 {pencilMode ?
@@ -207,6 +289,10 @@ const Board = () => {
                     <IconButton onClick={updatePencilMode}>
                         <BorderColorIcon />
                     </IconButton>}
+
+                <IconButton onClick={reverseOperation}>
+                    <RestoreIcon />
+                </IconButton>
 
             </div>
         </div>

@@ -60,10 +60,10 @@ input[type="number"] {
     ". . ."
     ". . ."
     ". . .";
-  color: rgb(128, 128, 128);
+  /* color: rgb(128, 128, 128); */
 }
 
-.PotentialSquareHighLighted {
+/* .PotentialSquareHighLighted {
   height: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -84,7 +84,7 @@ input[type="number"] {
   justify-content: center;
   align-items: center;
   font-weight: bolder;
-}
+} */
 
 .NormalSquare{
   height: 100%;
@@ -92,5 +92,4 @@ input[type="number"] {
   justify-content: center;
   align-items: center;
   font-weight: bolder;
-  /* background-color: rgb(100, 156, 175); */
 }

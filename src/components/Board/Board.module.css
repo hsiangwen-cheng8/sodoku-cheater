@@ -1,9 +1,14 @@
 .Board {
     display: grid;
-    grid-template-columns: 250px 1fr 250px;
+    grid-template-columns: 100px 1fr 250px;
     height: 80%;
+    width: 100%;
 }
-
+.BoardWrapper{
+  justify-content: center;
+  /* margin-top: auto; */
+  margin-bottom: auto;
+}
 .Container {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
@@ -19,4 +24,18 @@
     ". . . . . . . . ."
     ". . . . . . . . ."
     ". . . . . . . . .";
+    width: 50vw;
+    height: 50vw;
+}
+@media only screen and (min-width: 1300px) {
+  .Board {
+    grid-template-columns: 300px 1fr 800px;
+    height: 80%;
+    width: 100%;
+}
+
+  .Container {
+      width: 37vw;
+      height: 37vw;
+  }
 }

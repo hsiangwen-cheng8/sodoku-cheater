@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import styles from './Square.module.css'
 
 const Square = (props) => {
@@ -21,39 +21,42 @@ const Square = (props) => {
             })
         );
     }
+
     const showSquare = () => {
         if (props.square.cur_val === 0) {
-            if (props.square.enableHighLight === true) {
-                return (
-                    <div className={styles.PotentialSquareHighLighted} data-x={props.square.row} data-y={props.square.col}>
-                        {showPotentialVals()}
-                    </div>
-                );
-            }
-            else {
-                return (
-                    <div className={styles.PotentialSquare} data-x={props.square.row} data-y={props.square.col}>
-                        {showPotentialVals()}
-                    </div>
-                );
-            }
+            return (
+                <div className={styles.PotentialSquare} data-x={props.square.row} data-y={props.square.col}>
+                    {showPotentialVals()}
+                </div>
+            );
         }
         else {
-            if (props.square.enableHighLight === true) {
-                return (
-                    <div className={styles.NormalSquareHighLighted} data-x={props.square.row} data-y={props.square.col}>
-                        {props.square.cur_val}
-                    </div>
-                );
-            }
-            else {
-                return (
-                    <div className={styles.NormalSquare} >
-                        {props.square.cur_val}
-                    </div>
-                );
-            }
+            return (
+                <div className={styles.NormalSquare} >
+                    {props.square.cur_val}
+                </div>
+            );
         }
+    }
+
+    const changeSquareBackground = () => {
+        if(props.square.showError === true)
+        {
+            return '#d91818';
+        }
+        if(props.selectedSquareID === props.square.id)
+            return '#5797ff';
+        else if(props.square.enableHighLight === 1)
+            return '#477acc';
+        else if(props.square.cur_val !== 0)
+            return '#3289a8';
+        else if(props.square.enableHighLight === 2)
+            return '#BBDEFB';
+        else if(props.square.enableHighLight === 3)
+            return '#E2EBF3';
+        
+        
+            
     }
 
     const handleOnClick = (e) => {
@@ -70,7 +73,8 @@ const Square = (props) => {
         data-y={props.square.col}
         onClick={handleOnClick}
         onKeyDown={handleOnKeyDown}
-        tabIndex={0}>
+        tabIndex={0}
+        style={{backgroundColor: changeSquareBackground()}}>
             {showSquare()}
         </div>
         
