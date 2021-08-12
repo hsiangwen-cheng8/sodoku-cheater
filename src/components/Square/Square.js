@@ -48,8 +48,8 @@ const Square = (props) => {
             return '#5797ff';
         else if(props.square.enableHighLight === 1)
             return '#477acc';
-        else if(props.square.cur_val !== 0)
-            return '#3289a8';
+        // else if(props.square.cur_val !== 0)
+        //     return '#3289a8';
         else if(props.square.enableHighLight === 2)
             return '#BBDEFB';
         else if(props.square.enableHighLight === 3)

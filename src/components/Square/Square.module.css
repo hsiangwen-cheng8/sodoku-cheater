@@ -91,5 +91,6 @@ input[type="number"] {
   display: flex;
   justify-content: center;
   align-items: center;
-  font-weight: bolder;
+  font-weight: 600;
+  font-size: x-large;
 }
