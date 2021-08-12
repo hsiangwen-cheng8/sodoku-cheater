@@ -119,9 +119,9 @@ const Board = () => {
     }
 
     const updateSquare = (id, val, mode = -1) => {
-        if(id === -1) {
-            showHighLightWithSelectedVal(val);  
-            return; 
+        if (id === -1) {
+            showHighLightWithSelectedVal(val);
+            return;
         }
         let square = Squares[id];
         let pre_val = square.cur_val;
@@ -199,18 +199,17 @@ const Board = () => {
         findError();
     }
 
-    const showHighLightWithSelectedVal = (val) =>
-    {
-        console.log(val)
+    const showHighLightWithSelectedVal = (val) => {
         let newBoard = [...Squares];
-        console.log(newBoard)
         for (let i = 0; i < newBoard.length; ++i) {
             newBoard[i].enableHighLight = 0;
-            if(newBoard[i].cur_val === val)
+            if (newBoard[i].cur_val === val)
                 newBoard[i].enableHighLight = 1;
-            else if(newBoard[i].cur_val > 0)
-                if(newBoard[i].potentialVals[val] === true)
-                    newBoard[i].enableHighLight = 1;
+            else if (newBoard[i].cur_val < 1 && val >= 0) {
+                if (newBoard[i].potential_vals[val-1] === true) { 
+                    newBoard[i].enableHighLight = 2; 
+                }
+            }  
         }
         setSquares(newBoard);
     }
@@ -333,15 +332,15 @@ const Board = () => {
                 </div>
 
                 <div className={styles.numberpad}>
-                    <NumberPad val={1} selectedSquareID={selectedSquareID} updateSquare={updateSquare}/>
-                    <NumberPad val={2} selectedSquareID={selectedSquareID} updateSquare={updateSquare}/>
-                    <NumberPad val={3} selectedSquareID={selectedSquareID} updateSquare={updateSquare}/>
-                    <NumberPad val={4} selectedSquareID={selectedSquareID} updateSquare={updateSquare}/>
-                    <NumberPad val={5} selectedSquareID={selectedSquareID} updateSquare={updateSquare}/>
-                    <NumberPad val={6} selectedSquareID={selectedSquareID} updateSquare={updateSquare}/>
-                    <NumberPad val={7} selectedSquareID={selectedSquareID} updateSquare={updateSquare}/>
-                    <NumberPad val={8} selectedSquareID={selectedSquareID} updateSquare={updateSquare}/>
-                    <NumberPad val={9} selectedSquareID={selectedSquareID} updateSquare={updateSquare}/>
+                    <NumberPad val={1} selectedSquareID={selectedSquareID} updateSquare={updateSquare} />
+                    <NumberPad val={2} selectedSquareID={selectedSquareID} updateSquare={updateSquare} />
+                    <NumberPad val={3} selectedSquareID={selectedSquareID} updateSquare={updateSquare} />
+                    <NumberPad val={4} selectedSquareID={selectedSquareID} updateSquare={updateSquare} />
+                    <NumberPad val={5} selectedSquareID={selectedSquareID} updateSquare={updateSquare} />
+                    <NumberPad val={6} selectedSquareID={selectedSquareID} updateSquare={updateSquare} />
+                    <NumberPad val={7} selectedSquareID={selectedSquareID} updateSquare={updateSquare} />
+                    <NumberPad val={8} selectedSquareID={selectedSquareID} updateSquare={updateSquare} />
+                    <NumberPad val={9} selectedSquareID={selectedSquareID} updateSquare={updateSquare} />
                 </div>
 
             </div>
