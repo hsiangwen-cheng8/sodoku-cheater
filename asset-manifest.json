@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/sodoku-cheater/static/css/main.f65be182.chunk.css",
-    "main.js": "/sodoku-cheater/static/js/main.f3378404.chunk.js",
-    "main.js.map": "/sodoku-cheater/static/js/main.f3378404.chunk.js.map",
+    "main.js": "/sodoku-cheater/static/js/main.a0cf653b.chunk.js",
+    "main.js.map": "/sodoku-cheater/static/js/main.a0cf653b.chunk.js.map",
     "runtime-main.js": "/sodoku-cheater/static/js/runtime-main.9a669477.js",
     "runtime-main.js.map": "/sodoku-cheater/static/js/runtime-main.9a669477.js.map",
     "static/js/2.2f8fd7cb.chunk.js": "/sodoku-cheater/static/js/2.2f8fd7cb.chunk.js",
@@ -17,6 +17,6 @@
     "static/js/runtime-main.9a669477.js",
     "static/js/2.2f8fd7cb.chunk.js",
     "static/css/main.f65be182.chunk.css",
-    "static/js/main.f3378404.chunk.js"
+    "static/js/main.a0cf653b.chunk.js"
   ]
 }
