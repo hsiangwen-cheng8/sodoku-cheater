@@ -6,6 +6,9 @@ import BorderColorIcon from '@material-ui/icons/BorderColor';
 import RestoreIcon from '@material-ui/icons/Restore';
 import ClearIcon from '@material-ui/icons/Clear';
 import NumberPad from '../NumberPad/NumberPad';
+import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects';
+import SentimentVerySatisfiedIcon from '@material-ui/icons/SentimentVerySatisfied';
+import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
 class SudokuCell {
     constructor(row, col, area, id, cur_val = 0,
         potential_vals = [true, true, true, true, true, true, true, true, true],
@@ -57,6 +60,7 @@ class backgroundEnum {
 }
 
 const Board = () => {
+    const [Answers, setAnswers] = useState([]);
     const [Squares, setSquares] = useState([]);
     const [Operations, setOperations] = useState([]);
     const [OperationsID, setOperationsID] = useState(0);
@@ -110,12 +114,14 @@ const Board = () => {
     }
 
     const initSquares = () => {
+        let newBoard = [];
         for (let i = 0; i < 9; ++i) {
             for (let j = 0; j < 9; ++j) {
                 let tmp_sqaure = new SudokuCell(i, j, getArea(i, j), i * 9 + j);
-                setSquares(squares => [...squares, tmp_sqaure])
+                newBoard.push(tmp_sqaure);
             }
         }
+        setSquares(newBoard);
     }
 
     const updateSquare = (id, val, mode = -1) => {
@@ -206,10 +212,10 @@ const Board = () => {
             if (newBoard[i].cur_val === val)
                 newBoard[i].enableHighLight = 1;
             else if (newBoard[i].cur_val < 1 && val >= 0) {
-                if (newBoard[i].potential_vals[val-1] === true) { 
-                    newBoard[i].enableHighLight = 2; 
+                if (newBoard[i].potential_vals[val - 1] === true) {
+                    newBoard[i].enableHighLight = 2;
                 }
-            }  
+            }
         }
         setSquares(newBoard);
     }
@@ -296,6 +302,39 @@ const Board = () => {
         showHighLightWithSelectedVal(-1);
     }
 
+    const startSolve = () => {
+        var SudokuSolver = require('sudoku-solver-js');
+        var solver = new SudokuSolver();
+        var puzzle = '';
+        for (let i = 0; i < Squares.length; ++i) {
+            puzzle += Squares[i].cur_val.toString();
+        }
+        console.log(puzzle)
+        let va = solver.solve(puzzle, { result: 'array' })
+        console.log(va);
+        setAnswers(va);
+    }
+
+    const showHint = () => {
+        if (Answers.length === 0)
+            return;
+        else {
+            updateSquare(selectedSquareID, Answers[selectedSquareID]);
+        }
+    }
+
+    const gaveUp = () => {
+        if (Answers.length === 0) {
+            startSolve();
+            gaveUp();
+        }
+        else {
+            for (let i = 0; i < Answers.length; ++i) {
+                updateSquare(i, Answers[i]);
+            }
+        }
+    }
+
     return (
         <div className={styles.Board}>
             <div></div>
@@ -328,6 +367,16 @@ const Board = () => {
                     </IconButton>
                     <IconButton onClick={onClickCancelSelect}>
                         <ClearIcon />
+                    </IconButton>
+                    <IconButton onClick={startSolve}>
+                        <EmojiObjectsIcon />
+                        Solver
+                    </IconButton>
+                    <IconButton onClick={showHint}>
+                        <SentimentVerySatisfiedIcon />
+                    </IconButton>
+                    <IconButton onClick={gaveUp}>
+                        <ThumbDownAltIcon />
                     </IconButton>
                 </div>
 
