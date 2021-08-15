@@ -9,6 +9,7 @@ import NumberPad from '../NumberPad/NumberPad';
 import EmojiObjectsIcon from '@material-ui/icons/EmojiObjects';
 import SentimentVerySatisfiedIcon from '@material-ui/icons/SentimentVerySatisfied';
 import ThumbDownAltIcon from '@material-ui/icons/ThumbDownAlt';
+import GameOverMessage from '../GameOverMessage/GameOverMessage';
 class SudokuCell {
     constructor(row, col, area, id, cur_val = 0,
         potential_vals = [true, true, true, true, true, true, true, true, true],
@@ -28,6 +29,7 @@ class SudokuCell {
         this.area = area;
         this.id = id;
         this.showError = showError;
+        this.editable = true;
     }
 };
 
@@ -59,12 +61,13 @@ class backgroundEnum {
     }
 }
 
-const Board = () => {
+const Board = (props) => {
     const [Answers, setAnswers] = useState([]);
     const [Squares, setSquares] = useState([]);
     const [Operations, setOperations] = useState([]);
     const [OperationsID, setOperationsID] = useState(0);
     const [pencilMode, setPencilMode] = useState(false);
+    const [hadError, setHadError] = useState(false);
     const [selectedSquareID, setselectedSquareID] = useState(-1);
 
     const getArea = (row, col) => {
@@ -88,11 +91,29 @@ const Board = () => {
             return 9;
     }
 
+    const checkGameOver = () => {
+        for (let i = 0; i < Squares.length; ++i) {
+            if (Squares[i].cur_val == 0) {
+                return;
+            }
+        }
+        if (!hadError) {
+            console.log('game over')
+            props.setGameOver(true);
+            let temp_squares = [...Squares];
+            for (let i = 0; i < temp_squares.length; ++i) {
+                temp_squares[i].editable = false;
+            }
+            setSquares(temp_squares);
+        }
+    }
+
     const findError = () => {
         let temp_squares = [...Squares];
         for (let i = 0; i < Squares.length; ++i) {
             temp_squares[i].showError = false;
         }
+        let foundErrorAll = false;
         for (let i = 0; i < Squares.length; ++i) {
             let target_square = temp_squares[i];
             temp_squares.map((square) => {
@@ -102,6 +123,7 @@ const Board = () => {
                         found_error = true;
                         square.showError = true;
                         target_square.showError = true;
+                        foundErrorAll = true;
                     }
                 }
                 if (!found_error && square.showError === false) {
@@ -111,6 +133,12 @@ const Board = () => {
             })
         }
         setSquares(temp_squares);
+        if (foundErrorAll) {
+            setHadError(true);
+        }
+        else {
+            setHadError(false);
+        }
     }
 
     const initSquares = () => {
@@ -129,6 +157,7 @@ const Board = () => {
             showHighLightWithSelectedVal(val);
             return;
         }
+        if (Squares[id].editable === false) return;
         let square = Squares[id];
         let pre_val = square.cur_val;
         let potentialValsUpdated = false;
@@ -203,6 +232,7 @@ const Board = () => {
         }
         showHighLightWrapper(id);
         findError();
+        checkGameOver();
     }
 
     const showHighLightWithSelectedVal = (val) => {
@@ -313,6 +343,7 @@ const Board = () => {
         let va = solver.solve(puzzle, { result: 'array' })
         console.log(va);
         setAnswers(va);
+        return va;
     }
 
     const showHint = () => {
@@ -325,14 +356,21 @@ const Board = () => {
 
     const gaveUp = () => {
         if (Answers.length === 0) {
-            startSolve();
-            gaveUp();
+            let answers = startSolve();
+            for (let i = 0; i < answers.length; ++i) {
+                updateSquare(i, answers[i]);
+            }
         }
         else {
             for (let i = 0; i < Answers.length; ++i) {
                 updateSquare(i, Answers[i]);
             }
         }
+    }
+
+    const restart = () => {
+        console.log('restart')
+        props.setGameOver(false);
     }
 
     return (
@@ -350,9 +388,10 @@ const Board = () => {
                         />
                     )}
                 </div>
+
             </div>
             <div className={styles.controlArea}>
-                <div>
+                <div className={styles.controlAreaButtons}>
                     {pencilMode ?
                         <IconButton color='primary' onClick={updatePencilMode}>
                             <BorderColorIcon />

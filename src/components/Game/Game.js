@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Board from '../Board/Board'
 const Game = () => {
+    const [gameOver, setGameOver] = useState(false);
     return (
-        <Board></Board>
+            <Board
+                setGameOver={setGameOver}
+                gameOver={gameOver}
+            />
     );
 }
 
