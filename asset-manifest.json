@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/sodoku-cheater/static/css/main.f65be182.chunk.css",
-    "main.js": "/sodoku-cheater/static/js/main.a0cf653b.chunk.js",
-    "main.js.map": "/sodoku-cheater/static/js/main.a0cf653b.chunk.js.map",
-    "runtime-main.js": "/sodoku-cheater/static/js/runtime-main.9a669477.js",
-    "runtime-main.js.map": "/sodoku-cheater/static/js/runtime-main.9a669477.js.map",
-    "static/js/2.2f8fd7cb.chunk.js": "/sodoku-cheater/static/js/2.2f8fd7cb.chunk.js",
-    "static/js/2.2f8fd7cb.chunk.js.map": "/sodoku-cheater/static/js/2.2f8fd7cb.chunk.js.map",
-    "static/js/3.82f90b7e.chunk.js": "/sodoku-cheater/static/js/3.82f90b7e.chunk.js",
-    "static/js/3.82f90b7e.chunk.js.map": "/sodoku-cheater/static/js/3.82f90b7e.chunk.js.map",
+    "main.css": "/sodoku-cheater/static/css/main.89430fc5.chunk.css",
+    "main.js": "/sodoku-cheater/static/js/main.20aa7a38.chunk.js",
+    "main.js.map": "/sodoku-cheater/static/js/main.20aa7a38.chunk.js.map",
+    "runtime-main.js": "/sodoku-cheater/static/js/runtime-main.bc06c96f.js",
+    "runtime-main.js.map": "/sodoku-cheater/static/js/runtime-main.bc06c96f.js.map",
+    "static/js/2.d7b94e95.chunk.js": "/sodoku-cheater/static/js/2.d7b94e95.chunk.js",
+    "static/js/2.d7b94e95.chunk.js.map": "/sodoku-cheater/static/js/2.d7b94e95.chunk.js.map",
+    "static/js/3.f8b5fa9f.chunk.js": "/sodoku-cheater/static/js/3.f8b5fa9f.chunk.js",
+    "static/js/3.f8b5fa9f.chunk.js.map": "/sodoku-cheater/static/js/3.f8b5fa9f.chunk.js.map",
     "index.html": "/sodoku-cheater/index.html",
-    "static/css/main.f65be182.chunk.css.map": "/sodoku-cheater/static/css/main.f65be182.chunk.css.map",
-    "static/js/2.2f8fd7cb.chunk.js.LICENSE.txt": "/sodoku-cheater/static/js/2.2f8fd7cb.chunk.js.LICENSE.txt"
+    "static/css/main.89430fc5.chunk.css.map": "/sodoku-cheater/static/css/main.89430fc5.chunk.css.map",
+    "static/js/2.d7b94e95.chunk.js.LICENSE.txt": "/sodoku-cheater/static/js/2.d7b94e95.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.9a669477.js",
-    "static/js/2.2f8fd7cb.chunk.js",
-    "static/css/main.f65be182.chunk.css",
-    "static/js/main.a0cf653b.chunk.js"
+    "static/js/runtime-main.bc06c96f.js",
+    "static/js/2.d7b94e95.chunk.js",
+    "static/css/main.89430fc5.chunk.css",
+    "static/js/main.20aa7a38.chunk.js"
   ]
 }
