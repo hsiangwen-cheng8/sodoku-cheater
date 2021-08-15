@@ -125,6 +125,13 @@ const Board = (props) => {
                         target_square.showError = true;
                         foundErrorAll = true;
                     }
+                    if(Answers.length > 0 && square.cur_val != Answers[i])
+                    {
+                        // console.log('found error aganist solution')
+                        found_error = true;
+                        target_square.showError = true;
+                        foundErrorAll = true;
+                    }
                 }
                 if (!found_error && square.showError === false) {
                     square.showError = false;
